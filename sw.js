@@ -1,5 +1,5 @@
  // register servicver worker 
- let staticCacheNames = 'currency-converter-static -v4'
+ let staticCacheNames = 'currency-converter-static-v4'
  const urlsToCache = [
      staticCacheNames
  ]
