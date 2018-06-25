@@ -1,7 +1,8 @@
  // register servicver worker 
- const statticCacheNames = 'currency-converter-static -v1'
- const allCaches = [
-      // add all out caches in the array 
+ const staticCacheNames = 'currency-converter-static -v1'
+ const urlsToCache = [
+      // urls to cache
+      staticCacheNames
  ] 
  if ('serviceWorker' in navigator) {
      navigator.serviceWorker.register('/sw.js').then(function (registration) {
@@ -15,5 +16,12 @@
 
 
  self.addEventListener('install',function(event){
-      // installations here 
+      event.waiting(caches.open(staticCacheNames).then(function(cache){
+           // add all caches here 
+           return cache.addAll([
+               '/skeleton',
+               'css/main.css',
+               'js/main.js'
+            ])
+      }))
  })
