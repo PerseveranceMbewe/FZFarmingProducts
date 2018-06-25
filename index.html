@@ -1,23 +1,11 @@
-<!DOCTYPE html>
 <html>
 <head>
     <title>Title</title>
     <link rel="canonical" href="https://{PerseveranceMbewe}.github.io/{repository}/" />
-    <style type="text/css">
-    /* --- application CSS here --- */
-    *{
-      background-color: #F5F4F0;
-      font-family: Georgia, serif;
-    }
-    </style>
+    
 </head>
 <body>
-  <h1>Currency Converter APP </h1>
-  <script>
-  if (navigator.serviceWorker) {
-    navigator.serviceWorker.register('/{repository}/sw.js', {scope: '/{repository}/'})
-    console.log('registered a service worker')
-  }
-  </script>
+  <h1>Currency Converter APP</h1>
+  <script src="sw.js"></script>
 </body>
 </html>
