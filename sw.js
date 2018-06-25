@@ -16,12 +16,12 @@
 
 
  self.addEventListener('install',function(event){
-      event.waiting(caches.open(staticCacheNames).then(function(cache){
+      event.waitUntil(caches.open(staticCacheNames).then(function(cache){
            // add all caches here 
            return cache.addAll([
                '/skeleton',
                'css/main.css',
                'js/main.js'
-            ])
+            ]);
       }))
  })
