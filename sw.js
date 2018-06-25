@@ -1,7 +1,6 @@
  // register servicver worker 
- const staticCacheNames = 'currency-converter-static -v2'
+ const staticCacheNames = 'currency-converter-static -v3'
  const urlsToCache = [
-     // urls to cache
      staticCacheNames
  ]
  if ('serviceWorker' in navigator) {
@@ -26,3 +25,19 @@
              ]);
          }));
 });
+
+
+self.addEventListener('activate', function(event) {
+    event.waitUntil(
+      caches.keys().then(function(cacheNames) {
+        return Promise.all(
+          cacheNames.filter(function(cacheName) {
+            return cacheName.startsWith('currency-') &&
+                   !allCaches.includes(cacheName);
+          }).map(function(cacheName) {
+            return caches.delete(cacheName);
+          })
+        );
+      })
+    );
+  });
