@@ -19,7 +19,8 @@
              // add all caches here 
              console.log('about to add all the caches to the server')
              return cache.addAll([
-                 '/skeleton',
+                 '/',
+                 '/index.html',
                  'css/main.css',
                  'js/main.js',
                  'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
@@ -50,11 +51,7 @@ self.addEventListener('activate', function(event) {
   
     if (requestUrl.origin === location.origin) {
       if (requestUrl.pathname === '/') {
-        event.respondWith(caches.match('/skeleton'));
-        return;
-      }
-      if (requestUrl.pathname.startsWith('/photos/')) {
-        event.respondWith(servePhoto(event.request));
+        event.respondWith(caches.match('/index.html'));
         return;
       }
     }
