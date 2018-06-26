@@ -1,5 +1,5 @@
  // register servicver worker 
- let staticCacheNames = 'currency-converter-static-v4'
+ const staticCacheNames = 'currency-converter-static-v5'
  const urlsToCache = [
      staticCacheNames
  ]
@@ -19,9 +19,11 @@
          caches.open(staticCacheNames).then(function (cache) {
              // add all caches here 
              return cache.addAll([
-                 '/skeleton',
+                 '/',
                  'css/main.css',
-                 'js/main.js'
+                 'js/main.js',
+                 'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
+                 'https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff'
              ]);
          }));
 });
