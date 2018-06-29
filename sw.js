@@ -1,5 +1,5 @@
 
- const staticCaheName = 'currency-converter-v3'
+ const staticCaheName = 'currency-converter-v4'
  const urlstoCache = [
      staticCaheName
  ]
