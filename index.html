@@ -1,16 +1,26 @@
 <html>
 <head>
     <title>Currency Converter</title>
-    <script type="text/javascript" src="js/idb.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/idb.js"></script>
     <script src='js/db-script.js'></script>
     <script src="sw.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <!--CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 </head>
 <body>
-  <h1>Currency Converter APP</h1>
-  Enter Amount<input type="text" name="amount">to
-  <select id='fr'></select>
-  <select id='to'></select>
-  <input type="button" value="Submit">
+  <div class="container">
+      <h1>Currency Converter APP</h1>
+      
+      Enter Amount<input type="text"  class="form-control form-control-sm" id='val'>
+      <h2><span class="badge badge-secondary">From</span></h2>
+      <select id='fr' class="dropdown-item" ></select>
+      <h2><span class="badge badge-secondary">To</span></h2>
+      <select id='to' class="dropdown-item" ></select>
+      <input type="button"  class="btn btn-success" id='convert' value="Convert">
+      <span class="badge badge-success">Results</span>
+  </div>
+  <script src="js/apiController.js"></script>
 </body>
 </html>

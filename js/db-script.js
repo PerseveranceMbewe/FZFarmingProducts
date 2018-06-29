@@ -69,12 +69,13 @@
            $(document).ready(()=>{
                let currencyItems =``;
                for(const currency of currencies){
-                   currencyItems+=`<option>${currency.id}</option>`;
+                   currencyItems+=`<option value=${currency.id}>${currency.id}</option>`;
                }
                $(`#fr`).html(currencyItems);
                $('#to').html(currencyItems);
            });
        });
    }
+   
    readCurrency();
 })();
