@@ -7,41 +7,54 @@
     const idbPromise = _openDatabase();
     addCurrencyItemtoList();
     document.getElementById(`convert`).addEventListener(`click`, () => {
+        
+        $(`#val`).html(' S')
         let to = $(`#to`).find(`:selected`).val()
         let fr = $(`#fr`).find(`:selected`).val();
-        console.log('clicked something')
-        
-        // return the results 
-         // cases do we have network fist then get the results from the network 
-         // if we don't have network check if we have store the pair before and if we have the pair then return the results 
-         // case 3 we don't have the pair show some notification, that user is offline or something 
-         if(navigator.onLine){
+        const mulplier = defaultInputValue($(`#multipler`).val());
+        if(navigator.onLine){
              storeConvertedCurrency(to,fr).then(val=>{
-                 const conversion = Object.values(Object.values(val)[1])[0].val;
-                 $(`#val`).html(conversion)
+                const conversion = Object.values(Object.values(val)[1])[0].val;
+                 $(`#val`).html(mulplier * parseFloat(conversion).toFixed(4))
              });
          }
-        
+         idbPromise.then(db=>{
+            const tx  = db.transaction('conversion');
+            const offlineObjectStore = tx.objectStore('conversion');
+            const currencyConversionIndex = offlineObjectStore.index(`val`);
+            currencyConversionIndex.getAll().then(results =>{
+                    for(const frto of results){
+                        if(frto.id.includes(`${fr}_${to}`)){
+                          $(`#val`).html((mulplier * frto.val).toFixed(4))
+                        }
+                        // currencies are swapped now - just perform an inverse to get the results
+                        if((frto.fr ===`${to}` & frto.to ==`${fr}`)){
+                            $(`#val`).html((1/frto.val).toFixed(4))
+                        }
+                    } 
+            })
+        })   
     })
-
-    fetch(currencyconverterapiURL).then(response => {
-         response.json().then(data => {
-            idbPromise.then(db => {
-                const currencies = data.results;
-                console.log(`fetching the data from the api ${currencies}`)
-                // create currency transaction
-                const tx = db.transaction(`currencies`, `readwrite`);
-                // currency objectstore
-                const store = tx.objectStore(`currencies`);
-                for (const currency in currencies) {
-                // save all the data
-                store.put(currencies[currency])
-            }
-                return tx.complete
-            }).catch(error=>console.log('Something went wrong', error))
+    
+    if(navigator.onLine){
+        fetch(currencyconverterapiURL).then(response => {
+            response.json().then(data => {
+               idbPromise.then(db => {
+                   const currencies = data.results;
+                   console.log(`fetching the data from the api ${currencies}`)
+                   // create currency transaction
+                   const tx = db.transaction(`currencies`, `readwrite`);
+                   // currency objectstore
+                   const store = tx.objectStore(`currencies`);
+                   for (const currency in currencies) {
+                   // save all the data
+                   store.put(currencies[currency])
+               }
+                   return tx.complete
+               }).catch(error=>console.log('Something went wrong', error))
+           })
         })
-     })
-
+    }
     // The following function stores all the conversions that we have made previously
     function storeConvertedCurrency(to, fr) {
         // call the function that converstes the results
@@ -52,7 +65,7 @@
         const storedValPromise = conversionPromise.then(data => {
             idbPromise.then(db => {
                 // access the database
-                const tx = db.transaction('conversion', 'readwrite');
+                const tx = db.transaction(`conversion`, `readwrite`);
                 const store = tx.objectStore('conversion');
                 // save api results on the idbstore for offline use.
                 const apiConvetedCurrency = data.results;
@@ -65,16 +78,15 @@
      
     function _openDatabase() {
         if (!navigator.serviceWorker) {
-             return Promise.resolve();
+             return Promise.resconversionolve();
         }
-        return idb.open('currencydb', 1, upgradeDb => {
+        return idb.open('currencydb', 2, upgradeDb => {
             const store = upgradeDb.createObjectStore('currencies', {keyPath: 'id' });
             const conversionStore = upgradeDb.createObjectStore('conversion', {keyPath: 'id'})
             const curreyIndex = store.createIndex('currency','id');
             const currencyConversionIndex = conversionStore.createIndex('val','id');
         });
      }
-
     function addCurrencyItemtoList(){
         idbPromise.then(db=>{
             const tx  = db.transaction('currencies');
@@ -94,7 +106,9 @@
             });
         });
     }
-    
+    function defaultInputValue(mulplier =1){
+        return mulplier = mulplier || 1
+    }
     function getValfromIndexPromiseDB(){
         const _getvalPromise = idbPromise.then(db=>{
             const tx = db.transaction(`conversion`);
@@ -103,5 +117,5 @@
             return currencyConversionIndex.getAll();
         })
         return _getvalPromise;
-    }
+    }  
 })();
