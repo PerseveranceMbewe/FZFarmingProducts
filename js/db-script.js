@@ -8,32 +8,37 @@
     addCurrencyItemtoList();
     document.getElementById(`convert`).addEventListener(`click`, () => {
         
-        $(`#val`).html(' S')
+        $(`#val`).html(' ')
         let to = $(`#to`).find(`:selected`).val()
         let fr = $(`#fr`).find(`:selected`).val();
-        const mulplier = defaultInputValue($(`#multipler`).val());
+        const mulplier = $(`#multipler`).val() || 1.0;
+        console.log('val', mulplier);
+        console.log('')
         if(navigator.onLine){
              storeConvertedCurrency(to,fr).then(val=>{
                 const conversion = Object.values(Object.values(val)[1])[0].val;
                  $(`#val`).html(mulplier * parseFloat(conversion).toFixed(4))
              });
          }
-         idbPromise.then(db=>{
-            const tx  = db.transaction('conversion');
-            const offlineObjectStore = tx.objectStore('conversion');
-            const currencyConversionIndex = offlineObjectStore.index(`val`);
-            currencyConversionIndex.getAll().then(results =>{
-                    for(const frto of results){
-                        if(frto.id.includes(`${fr}_${to}`)){
-                          $(`#val`).html((mulplier * frto.val).toFixed(4))
-                        }
-                        // currencies are swapped now - just perform an inverse to get the results
-                        if((frto.fr ===`${to}` & frto.to ==`${fr}`)){
-                            $(`#val`).html((1/frto.val).toFixed(4))
-                        }
-                    } 
-            })
-        })   
+         else{
+            idbPromise.then(db=>{
+                const tx  = db.transaction('conversion');
+                const offlineObjectStore = tx.objectStore('conversion');
+                const currencyConversionIndex = offlineObjectStore.index(`val`);
+                currencyConversionIndex.getAll().then(results =>{
+                        for(const frto of results){
+                            if(frto.id.includes(`${fr}_${to}`)){
+                              $(`#val`).html(parseFloat(mulplier * frto.val).toFixed(4))
+                            }
+                            // currencies are swapped now - just perform an inverse to get the results
+                            else if((frto.fr ===`${to}` & frto.to ==`${fr}`)){
+                                $(`#val`).html((1/frto.val).toFixed(4))
+                            }
+                        } 
+                })
+            })   
+         }
+        
     })
     
     if(navigator.onLine){
