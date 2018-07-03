@@ -33,11 +33,7 @@
                             // currencies are swapped now - just perform an inverse to get the results
                             else if((frto.fr ===`${to}` & frto.to ==`${fr}`)){
                                 $(`#val`).html(parseFloat(mulplier*(1/frto.val)).toFixed(4))
-                            }
-                            else if(frto===frto){
-                                $(`#val`).html(1);
-                            }
-                        
+                            }    
                         } 
                 })
             })   
