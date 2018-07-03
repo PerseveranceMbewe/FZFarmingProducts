@@ -12,8 +12,6 @@
         let to = $(`#to`).find(`:selected`).val()
         let fr = $(`#fr`).find(`:selected`).val();
         const mulplier = $(`#multipler`).val() || 1.0;
-        console.log('val', mulplier);
-        console.log('')
         if(navigator.onLine){
              storeConvertedCurrency(to,fr).then(val=>{
                 const conversion = Object.values(Object.values(val)[1])[0].val;
