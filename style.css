@@ -13,9 +13,17 @@
   margin: 0;
   padding: 0; }
 
+/**
+simple addition of a css file 
+**/
+
+
+
 body {
   font-family: "Karla", sans-serif;
   color: #707070; }
+
+
 
 h1,
 h2,
